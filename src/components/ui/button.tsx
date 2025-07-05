@@ -1,3 +1,9 @@
+/**
+ * Button UI Component
+ *
+ * Provides a styled button with multiple variants and sizes for use throughout the app.
+ * Supports asChild for custom rendering and integrates with shadcn/ui and Tailwind CSS.
+ */
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"

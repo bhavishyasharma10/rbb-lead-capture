@@ -1,6 +1,12 @@
+/**
+ * Agent Dashboard Page
+ *
+ * Displays a real-time dashboard for agents to view and manage property leads submitted via the lead capture form.
+ * Fetches leads from Supabase and updates every 5 seconds. Shows lead details and status.
+ * Uses shadcn/ui components for UI.
+ */
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-// @ts-ignore: shadcn/ui Card import placeholder
 import { Card } from "@/components/ui/card";
 
 interface Lead {

@@ -1,12 +1,16 @@
+/**
+ * Lead Capture Form Page
+ *
+ * This page provides a form for users to submit property leads (name, email, phone, property address).
+ * On submission, the form data is sent to a configured webhook endpoint (see NEXT_PUBLIC_WEBHOOK_URL).
+ * Success and error states are displayed to the user. Uses shadcn/ui components for UI.
+ */
 import { useState } from "react";
-// @ts-ignore: shadcn/ui Card import placeholder
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-
-const WEBHOOK_URL = "http://localhost:5678/webhook-test/6cfcb50e-79cc-4d69-867e-4886271072d4";
 
 export default function LeadCapture() {
   const [form, setForm] = useState({
@@ -29,7 +33,7 @@ export default function LeadCapture() {
     setError("");
     setSuccess(false);
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      const res = await fetch(process.env.NEXT_PUBLIC_NEXT_PUBLIC_WEBHOOK_URL as string, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -37,8 +41,8 @@ export default function LeadCapture() {
       if (!res.ok) throw new Error("Submission failed");
       setSuccess(true);
       setForm({ name: "", email: "", phone: "", property_address: "" });
-    } catch (err: any) {
-      setError(err.message || "Unknown error");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }

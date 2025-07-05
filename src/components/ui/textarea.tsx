@@ -2,6 +2,13 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Textarea UI Component
+ *
+ * Provides a styled textarea field for multi-line text input in forms.
+ * Integrates with shadcn/ui and Tailwind CSS for consistent design.
+ */
+
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea

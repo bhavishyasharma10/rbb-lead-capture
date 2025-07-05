@@ -1,3 +1,9 @@
+/**
+ * Card UI Component
+ *
+ * Provides a styled card container and subcomponents (header, footer, title, etc.) for layout and grouping content.
+ * Used for forms, dashboards, and other content blocks. Follows shadcn/ui and Tailwind CSS conventions.
+ */
 import * as React from "react"
 
 import { cn } from "@/lib/utils"

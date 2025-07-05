@@ -2,6 +2,13 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Input UI Component
+ *
+ * Provides a styled input field for forms, supporting all standard input props.
+ * Integrates with shadcn/ui and Tailwind CSS for consistent design.
+ */
+
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input

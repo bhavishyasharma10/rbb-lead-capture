@@ -1,3 +1,10 @@
+/**
+ * Alert UI Component
+ *
+ * Provides styled alert messages for feedback, errors, or notifications.
+ * Supports variants and includes subcomponents for title and description.
+ * Uses shadcn/ui conventions and Tailwind CSS.
+ */
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
