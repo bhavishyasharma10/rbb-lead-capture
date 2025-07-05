@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 
+const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL || "";
 export default function LeadCapture() {
   const [form, setForm] = useState({
     name: "",
@@ -33,7 +34,7 @@ export default function LeadCapture() {
     setError("");
     setSuccess(false);
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_NEXT_PUBLIC_WEBHOOK_URL as string, {
+      const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
