@@ -1,0 +1,232 @@
+{
+  "name": "Lead Capture Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6cfcb50e-79cc-4d69-867e-4886271072d4",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        200,
+        -20
+      ],
+      "id": "7dc75334-1ddd-4ba5-9cc4-2e23a101c598",
+      "name": "Webhook",
+      "webhookId": "6cfcb50e-79cc-4d69-867e-4886271072d4",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "tableId": "leads",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "name",
+              "fieldValue": "={{ $json.body.name }}"
+            },
+            {
+              "fieldId": "email",
+              "fieldValue": "={{ $json.body.email }}"
+            },
+            {
+              "fieldId": "property_address",
+              "fieldValue": "={{ $json.body.property_address }}"
+            },
+            {
+              "fieldId": "phone",
+              "fieldValue": "={{ $json.body.phone }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        420,
+        -20
+      ],
+      "id": "13c3f94e-445a-4996-9327-c24829a3ed46",
+      "name": "Create a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rVuNyW6TKcLthzK8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "bhavishyasharma10@gmail.com",
+        "toEmail": "={{ $json.email }}",
+        "subject": "We got your viewing request!",
+        "html": "=Hey {{ $json.name }}, \nWe got your request for {{ $json.property_address }}. Our team will contact you soon!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        -20
+      ],
+      "id": "c54b6245-2a4f-452d-bdef-4b7c33a12b80",
+      "name": "Send email",
+      "webhookId": "260700f1-883e-4178-b4a8-7a0cf8e162a6",
+      "credentials": {
+        "smtp": {
+          "id": "TLlEXHxrDCvsuQt7",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "from": "+17695532395",
+        "to": "={{ $('Create a row').item.json.phone }}",
+        "message": "=Hey {{ $('Create a row').item.json.name }}, We are processing your request.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        860,
+        -20
+      ],
+      "id": "b9c431ea-3ab2-431c-b527-2d8a487a6d15",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "alwaysOutputData": false,
+      "credentials": {
+        "twilioApi": {
+          "id": "mc9agDZPq7SOckBx",
+          "name": "Twilio account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "tableId": "leads",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $('Create a row').item.json.id }}"
+            }
+          ]
+        },
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldId": "status",
+              "fieldValue": "Texted"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        -20
+      ],
+      "id": "d4f2b184-4e8c-4886-8047-8dde3f348e50",
+      "name": "Update a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "rVuNyW6TKcLthzK8",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"message\": \"Lead stored successfully\"\n}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1300,
+        -20
+      ],
+      "id": "fefd2f78-3808-4155-8f38-f4d5aeb681d9",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a row": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send email": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an SMS/MMS/WhatsApp message": {
+      "main": [
+        [
+          {
+            "node": "Update a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update a row": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6b4b63d9-d8dc-4e4a-815c-6bbc6c8dd3c9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ca6bd776aeca80effc58c7f6006dea8702a2ab2f22e09147c02ea0bb22f03433"
+  },
+  "id": "9gjWl7N7RxG8B9Dk",
+  "tags": []
+}

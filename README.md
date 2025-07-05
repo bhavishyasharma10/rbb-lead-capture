@@ -2,6 +2,9 @@
 
 A modern lead capture and agent dashboard web application built with [Next.js](https://nextjs.org), [Supabase](https://supabase.com), and [shadcn/ui](https://ui.shadcn.com/). This project enables users to submit property leads and provides agents with a real-time dashboard to manage and track submissions.
 
+Demo Video: https://drive.google.com/file/d/144iUA-MnTvy3awd67zOQFaOaXYT2zDK4/view?usp=sharing
+Live Link: https://rbb-lead-capture.vercel.app/
+
 ## Features
 - **Lead Capture Form:** Collects name, email, phone, and property address from users.
 - **Agent Dashboard:** Displays all leads, their status, and updates in real time.
@@ -54,19 +57,22 @@ npm start
 
 ---
 
-> This project was bootstrapped with [create-next-app](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## n8n Automation Flow
 
-## Learn More
+This repository includes an `n8n_flow.json` file, which you can import directly into your [n8n](https://n8n.io/) instance to set up the automation for lead capture.
 
-To learn more about Next.js, take a look at the following resources:
+**How to use:**
+1. Open your n8n dashboard.
+2. Click the menu and select **Import Workflow**.
+3. Upload the `n8n_flow.json` file from this repository.
+4. Update any credentials (Supabase, SMTP, Twilio) as needed for your environment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**What this flow does:**
+- Receives lead submissions via a webhook (the URL should match your `NEXT_PUBLIC_WEBHOOK_URL`).
+- Stores the lead in your Supabase `leads` table.
+- Sends a confirmation email to the lead.
+- Sends an SMS to the lead using Twilio.
+- Updates the lead's status in Supabase to "Texted".
+- Responds to the webhook with a success message.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This makes it easy to get started with the backend automation for the lead capture app—no manual setup required!
